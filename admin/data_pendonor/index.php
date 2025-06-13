@@ -72,6 +72,12 @@ $blood_donors = $db->query($blood_donors_query)->fetch_all(MYSQLI_ASSOC);
               Artikel Edukasi
             </a>
           </li>
+          <li>
+            <a href="../../auth/logout.php" class="flex items-center p-2 rounded hover:bg-blood-dark">
+              <i class="fa-solid fa-right-from-bracket mr-3"></i>
+              Logout
+            </a>
+          </li>
         </ul>
       </nav>
     </div>
