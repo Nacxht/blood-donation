@@ -125,30 +125,6 @@ if (isset($_SESSION["role"])) {
     </div>
   </section>
 
-  <!-- Stats Section -->
-  <section class="py-16 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
-        <div class="p-6">
-          <div class="text-4xl font-bold text-red-500 mb-2">1,250+</div>
-          <div class="text-gray-600">Donor Terdaftar</div>
-        </div>
-        <div class="p-6">
-          <div class="text-4xl font-bold text-blue-500 mb-2">580+</div>
-          <div class="text-gray-600">Darah Tersalurkan</div>
-        </div>
-        <div class="p-6">
-          <div class="text-4xl font-bold text-green-500 mb-2">95%</div>
-          <div class="text-gray-600">Tingkat Keberhasilan</div>
-        </div>
-        <div class="p-6">
-          <div class="text-4xl font-bold text-purple-500 mb-2">24/7</div>
-          <div class="text-gray-600">Layanan Darurat</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- Features Section -->
   <section class="py-20 bg-gray-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -186,21 +162,6 @@ if (isset($_SESSION["role"])) {
           <p class="text-gray-600">Tim support siap membantu Anda kapan saja untuk situasi darurat.</p>
         </div>
       </div>
-    </div>
-  </section>
-
-  <!-- CTA Section -->
-  <section class="py-20 bg-red-500 text-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      <h2 class="text-3xl md:text-4xl font-bold mb-6">
-        Setiap Tetes Darah Berharga
-      </h2>
-      <p class="text-xl mb-8 opacity-90">
-        Bergabunglah dengan komunitas donor darah dan selamatkan nyawa bersama-sama
-      </p>
-      <a href="donasi.php" class="bg-white text-red-500 hover:bg-gray-100 px-8 py-4 rounded-full font-semibold text-lg transition transform hover:scale-105">
-        Mulai Sekarang
-      </a>
     </div>
   </section>
 
