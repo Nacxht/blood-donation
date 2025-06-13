@@ -1,18 +1,19 @@
 <?php
 session_start();
 require_once('db/config.php');
+require_once("auth.php");
 
 // Ambil golongan darah user jika sudah login
 $user_blood_type_id = null;
 
 if (isset($_SESSION['username'])) {
-    $username = $_SESSION['username'];
-    $stmt = $db->prepare("SELECT blood_type_id FROM users WHERE username = ?");
-    $stmt->bind_param("s", $username);
-    $stmt->execute();
-    $stmt->bind_result($user_blood_type_id);
-    $stmt->fetch();
-    $stmt->close();
+  $username = $_SESSION['username'];
+  $stmt = $db->prepare("SELECT blood_type_id FROM users WHERE username = ?");
+  $stmt->bind_param("s", $username);
+  $stmt->execute();
+  $stmt->bind_result($user_blood_type_id);
+  $stmt->fetch();
+  $stmt->close();
 }
 ?>
 
@@ -35,17 +36,21 @@ if (isset($_SESSION['username'])) {
     }
 
     .card-hover:hover {
-      transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
     }
 
     .blood-drop {
       animation: pulse 1s infinite;
     }
-    
+
     @keyframes pulse {
-      0%, 100% {
+
+      0%,
+      100% {
         transform: scale(1);
       }
+
       50% {
         transform: scale(1.1);
       }
@@ -128,34 +133,35 @@ if (isset($_SESSION['username'])) {
         $result = $db->query($query);
 
         if ($result->num_rows > 0):
-            while($row = $result->fetch_assoc()):
+          while ($row = $result->fetch_assoc()):
         ?>
-          <div class="bg-white p-6 rounded-lg shadow-md card-hover">
-            <h3 class="text-xl font-bold text-gray-800 mb-2"><?= htmlspecialchars($row['event_name']) ?></h3>
-            <p class="text-sm text-gray-600 mb-1">
-              <i class="fas fa-map-marker-alt text-red-400 mr-1"></i> <?= htmlspecialchars($row['location']) ?>
-            </p>
-            <p class="text-sm text-gray-600 mb-1">
-              <i class="fas fa-calendar-alt text-red-400 mr-1"></i> <?= date("d M Y", strtotime($row['date'])) ?> <?= $row['time'] ?>
-            </p>
-            <p class="text-sm text-gray-600 mb-1">
-              <i class="fas fa-tint text-red-400 mr-1"></i> 
-              <span class="uppercase font-semibold"><?= strtoupper($row['type'] . $row['rhesus']) ?></span>
-            </p>
-            <?php if (!empty($row['description'])): ?>
-              <p class="text-sm text-gray-500 italic mb-2"><?= htmlspecialchars($row['description']) ?></p>
-            <?php endif ?>
+            <div class="bg-white p-6 rounded-lg shadow-md card-hover">
+              <h3 class="text-xl font-bold text-gray-800 mb-2"><?= htmlspecialchars($row['event_name']) ?></h3>
+              <p class="text-sm text-gray-600 mb-1">
+                <i class="fas fa-map-marker-alt text-red-400 mr-1"></i> <?= htmlspecialchars($row['location']) ?>
+              </p>
+              <p class="text-sm text-gray-600 mb-1">
+                <i class="fas fa-calendar-alt text-red-400 mr-1"></i> <?= date("d M Y", strtotime($row['date'])) ?> <?= $row['time'] ?>
+              </p>
+              <p class="text-sm text-gray-600 mb-1">
+                <i class="fas fa-tint text-red-400 mr-1"></i>
+                <span class="uppercase font-semibold"><?= strtoupper($row['type'] . $row['rhesus']) ?></span>
+              </p>
+              <?php if (!empty($row['description'])): ?>
+                <p class="text-sm text-gray-500 italic mb-2"><?= htmlspecialchars($row['description']) ?></p>
+              <?php endif ?>
 
-            <!-- Tombol Donor Sekarang -->
-            <button 
-              class="mt-4 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 donor-btn"
-              data-event="<?= htmlspecialchars($row['event_name']) ?>"
-              data-blood="<?= $row['blood_type_id'] ?>">
-              Donor Sekarang
-            </button>
+              <!-- Tombol Donor Sekarang -->
+              <button
+                class="mt-4 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 donor-btn"
+                data-event="<?= htmlspecialchars($row['event_name']) ?>"
+                data-blood="<?= $row['blood_type_id'] ?>">
+                Donor Sekarang
+              </button>
 
-          </div>
-        <?php endwhile; else: ?>
+            </div>
+          <?php endwhile;
+        else: ?>
           <div class="col-span-3 text-center text-gray-500 py-12">Tidak ada permintaan donor darah.</div>
         <?php endif; ?>
 
@@ -236,4 +242,5 @@ if (isset($_SESSION['username'])) {
   </script>
 
 </body>
+
 </html>

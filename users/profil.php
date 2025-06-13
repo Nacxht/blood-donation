@@ -4,8 +4,8 @@ require_once('../auth.php');
 
 // Pastikan user sudah login
 if (!isset($_SESSION['username'])) {
-    header('Location: ../auth/login.php');
-    exit;
+  header('Location: ../auth/login.php');
+  exit;
 }
 
 // Ambil data user dari database
@@ -37,6 +37,7 @@ $last_donation = isset($user['last_donation']) ? date('d F Y', strtotime($user['
     .profile-card {
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     }
+
     .blood-type {
       font-size: 2rem;
       text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -64,17 +65,17 @@ $last_donation = isset($user['last_donation']) ? date('d F Y', strtotime($user['
               </svg>
             </div>
             <div class="text-center">
-              <div class="blood-type text-red-600 font-bold mb-1"><?= $user['type'].$user['rhesus'] ?></div>
+              <div class="blood-type text-red-600 font-bold mb-1"><?= $user['type'] . $user['rhesus'] ?></div>
               <div class="text-sm text-gray-500">Golongan Darah</div>
             </div>
           </div>
-          
+
           <div class="w-full bg-gray-100 rounded-lg p-4">
             <h3 class="font-semibold text-gray-800 mb-2">Status Donor</h3>
-            <?php 
-              $lastDonation = $user['last_donation'] ? strtotime($user['last_donation']) : 0;
-              $nextDonation = strtotime('+3 months', $lastDonation);
-              $canDonate = time() >= $nextDonation;
+            <?php
+            $lastDonation = $user['last_donation'] ? strtotime($user['last_donation']) : 0;
+            $nextDonation = strtotime('+3 months', $lastDonation);
+            $canDonate = time() >= $nextDonation;
             ?>
             <div class="flex items-center mb-1">
               <div class="w-3 h-3 rounded-full mr-2 <?= $canDonate ? 'bg-green-500' : 'bg-yellow-500' ?>"></div>
@@ -91,23 +92,23 @@ $last_donation = isset($user['last_donation']) ? date('d F Y', strtotime($user['
           <!-- Personal Info Section -->
           <div class="mb-8">
             <h2 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">Informasi Pribadi</h2>
-            
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <p class="text-sm text-gray-500">Nama Lengkap</p>
                 <p class="font-medium"><?= htmlspecialchars($user['fullname']) ?></p>
               </div>
-              
+
               <div>
                 <p class="text-sm text-gray-500">Jenis Kelamin</p>
                 <p class="font-medium"><?= $user['gender'] == 'male' ? 'Laki-laki' : 'Perempuan' ?></p>
               </div>
-              
+
               <div>
                 <p class="text-sm text-gray-500">Tanggal Lahir</p>
                 <p class="font-medium"><?= $birth_date ?></p>
               </div>
-              
+
               <div>
                 <p class="text-sm text-gray-500">Umur</p>
                 <p class="font-medium"><?= $user['age'] ?> tahun</p>
@@ -118,18 +119,18 @@ $last_donation = isset($user['last_donation']) ? date('d F Y', strtotime($user['
           <!-- Contact Info Section -->
           <div class="mb-8">
             <h2 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">Informasi Kontak</h2>
-            
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <p class="text-sm text-gray-500">Email</p>
                 <p class="font-medium"><?= htmlspecialchars($user['email']) ?></p>
               </div>
-              
+
               <div>
                 <p class="text-sm text-gray-500">Nomor Telepon</p>
                 <p class="font-medium"><?= htmlspecialchars($user['phone']) ?></p>
               </div>
-              
+
               <div class="md:col-span-2">
                 <p class="text-sm text-gray-500">Alamat</p>
                 <p class="font-medium"><?= htmlspecialchars($user['address']) ?></p>
@@ -140,13 +141,13 @@ $last_donation = isset($user['last_donation']) ? date('d F Y', strtotime($user['
           <!-- Donation Info Section -->
           <div class="mb-8">
             <h2 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">Informasi Donor</h2>
-            
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <p class="text-sm text-gray-500">Riwayat Donor</p>
                 <p class="font-medium"><?= $user['donation_history'] == 'y' ? 'Pernah donor' : 'Belum pernah donor' ?></p>
               </div>
-              
+
               <div>
                 <p class="text-sm text-gray-500">Terakhir Donor</p>
                 <p class="font-medium"><?= $last_donation ?></p>
@@ -157,13 +158,13 @@ $last_donation = isset($user['last_donation']) ? date('d F Y', strtotime($user['
           <!-- Account Info Section -->
           <div class="mb-6">
             <h2 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">Informasi Akun</h2>
-            
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <p class="text-sm text-gray-500">Username</p>
                 <p class="font-medium"><?= htmlspecialchars($user['username']) ?></p>
               </div>
-              
+
               <div>
                 <p class="text-sm text-gray-500">Tanggal Registrasi</p>
                 <p class="font-medium"><?= date('d F Y', strtotime($user['created_at'])) ?></p>
@@ -189,4 +190,5 @@ $last_donation = isset($user['last_donation']) ? date('d F Y', strtotime($user['
     </div>
   </div>
 </body>
+
 </html>
