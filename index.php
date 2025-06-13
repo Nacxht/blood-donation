@@ -1,5 +1,5 @@
 <?php
-require_once("auth.php");
+session_start();
 ?>
 
 <!DOCTYPE html>
@@ -26,7 +26,7 @@ require_once("auth.php");
     }
 
     .blood-drop {
-      animation: pulse 2s infinite;
+      animation: pulse 1s infinite;
     }
 
     @keyframes pulse {
@@ -52,26 +52,49 @@ require_once("auth.php");
           <i class="fas fa-tint text-red-500 text-2xl blood-drop"></i>
           <span class="ml-2 text-xl font-bold text-gray-800">BloodCare</span>
         </div>
+
+        <!-- Desktop Menu -->
         <div class="hidden md:block">
           <div class="ml-10 flex items-baseline space-x-4">
-            <a href="#" class="text-red-500 font-medium px-3 py-2 rounded-md">Beranda</a>
+            <a href="index.php" class="text-red-500 font-medium px-3 py-2 rounded-md transition">Beranda</a>
             <a href="artikel.php" class="text-gray-600 hover:text-red-500 px-3 py-2 rounded-md transition">Artikel</a>
             <a href="donasi.php" class="text-gray-600 hover:text-red-500 px-3 py-2 rounded-md transition">Donor</a>
 
             <?php if (isset($_SESSION["username"])): ?>
-              <a href="#" class="text-gray-600 hover:text-red-500 px-3 py-2 rounded-md transition">Profile</a>
+              <a href="users/profil.php" class="text-gray-600 hover:text-red-500 px-3 py-2 rounded-md transition">Profil</a>
             <?php else: ?>
               <a href="auth/login.php" class="text-gray-600 hover:text-red-500 px-3 py-2 rounded-md transition">Login</a>
               <a href="auth/registrasi.php" class="text-gray-600 hover:text-red-500 px-3 py-2 rounded-md transition">Register</a>
             <?php endif ?>
           </div>
         </div>
-        <button class="md:hidden">
-          <i class="fas fa-bars text-gray-600"></i>
-        </button>
+
+        <!-- Hamburger Button -->
+        <div class="md:hidden">
+          <button id="menu-toggle" class="focus:outline-none">
+            <i class="fas fa-bars text-gray-600 text-2xl"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200">
+      <div class="px-4 pt-4 pb-4 space-y-2">
+        <a href="index.php" class="block text-red-500 font-medium px-3 py-2 rounded-md transition">Beranda</a>
+        <a href="artikel.php" class="block text-gray-600 hover:text-red-500 px-3 py-2 rounded-md transition">Artikel</a>
+        <a href="donasi.php" class="block text-gray-600 hover:text-red-500 px-3 py-2 rounded-md transition">Donor</a>
+
+        <?php if (isset($_SESSION["username"])): ?>
+          <a href="users/profil.php" class="block text-gray-600 hover:text-red-500 px-3 py-2 rounded-md transition">Profil</a>
+        <?php else: ?>
+          <a href="auth/login.php" class="block text-gray-600 hover:text-red-500 px-3 py-2 rounded-md transition">Login</a>
+          <a href="auth/registrasi.php" class="block text-gray-600 hover:text-red-500 px-3 py-2 rounded-md transition">Register</a>
+        <?php endif ?>
       </div>
     </div>
   </nav>
+
 
   <!-- Hero Section -->
   <section class="gradient-bg text-white py-20">
@@ -85,11 +108,11 @@ require_once("auth.php");
           Platform digital untuk menghubungkan donor darah dengan yang membutuhkan
         </p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
-          <a href="donasi.html" class="bg-red-500 hover:bg-red-600 text-white px-8 py-4 rounded-full font-semibold transition transform hover:scale-105">
+          <a href="donasi.php" class="bg-red-500 hover:bg-red-600 text-white px-8 py-4 rounded-full font-semibold transition transform hover:scale-105">
             <i class="fas fa-hand-holding-medical mr-2"></i>
             Cari Donor Darah
           </a>
-          <a href="#" class="bg-white text-purple-600 hover:bg-gray-100 px-8 py-4 rounded-full font-semibold transition transform hover:scale-105">
+          <a href="auth/registrasi.php" class="bg-white text-purple-600 hover:bg-gray-100 px-8 py-4 rounded-full font-semibold transition transform hover:scale-105">
             <i class="fas fa-user-plus mr-2"></i>
             Daftar Sebagai Donor
           </a>
@@ -139,8 +162,8 @@ require_once("auth.php");
           <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mb-6">
             <i class="fas fa-search text-red-500 text-2xl"></i>
           </div>
-          <h3 class="text-xl font-semibold mb-4">Pencarian Cepat</h3>
-          <p class="text-gray-600">Temukan donor darah berdasarkan golongan darah dan lokasi dengan mudah dan cepat.</p>
+          <h3 class="text-xl font-semibold mb-4">Pencarian Donor</h3>
+          <p class="text-gray-600">Temukan donor darah berdasarkan golongan darah anda</p>
         </div>
 
         <div class="bg-white p-8 rounded-xl shadow-lg card-hover">
@@ -171,7 +194,7 @@ require_once("auth.php");
       <p class="text-xl mb-8 opacity-90">
         Bergabunglah dengan komunitas donor darah dan selamatkan nyawa bersama-sama
       </p>
-      <a href="donation.html" class="bg-white text-red-500 hover:bg-gray-100 px-8 py-4 rounded-full font-semibold text-lg transition transform hover:scale-105">
+      <a href="donasi.php" class="bg-white text-red-500 hover:bg-gray-100 px-8 py-4 rounded-full font-semibold text-lg transition transform hover:scale-105">
         Mulai Sekarang
       </a>
     </div>
@@ -191,15 +214,15 @@ require_once("auth.php");
         <div>
           <h3 class="text-lg font-semibold mb-4">Layanan</h3>
           <ul class="space-y-2 text-gray-400">
-            <li><a href="#" class="hover:text-white transition">Cari Donor</a></li>
-            <li><a href="#" class="hover:text-white transition">Daftar Donor</a></li>
+            <li><a href="donasi.php" class="hover:text-white transition">Cari Darah</a></li>
+            <li><a href="auth/registrasi.php" class="hover:text-white transition">Daftar Donor</a></li>
             <li><a href="#" class="hover:text-white transition">Darurat</a></li>
           </ul>
         </div>
         <div>
           <h3 class="text-lg font-semibold mb-4">Informasi</h3>
           <ul class="space-y-2 text-gray-400">
-            <li><a href="artikel.html" class="hover:text-white transition">Artikel</a></li>
+            <li><a href="artikel.php" class="hover:text-white transition">Artikel</a></li>
             <li><a href="#" class="hover:text-white transition">FAQ</a></li>
             <li><a href="#" class="hover:text-white transition">Bantuan</a></li>
           </ul>
@@ -208,8 +231,8 @@ require_once("auth.php");
           <h3 class="text-lg font-semibold mb-4">Kontak</h3>
           <ul class="space-y-2 text-gray-400">
             <li><i class="fas fa-phone mr-2"></i> (021) 555-0123</li>
-            <li><i class="fas fa-envelope mr-2"></i> info@bloodcare.id</li>
-            <li><i class="fas fa-map-marker-alt mr-2"></i> Jakarta, Indonesia</li>
+            <li><i class="fas fa-envelope mr-2"></i> info@bloodCare.id</li>
+            <li><i class="fas fa-map-marker-alt mr-2"></i> Bangkalan, Indonesia</li>
           </ul>
         </div>
       </div>
@@ -219,6 +242,14 @@ require_once("auth.php");
       </div>
     </div>
   </footer>
-</body>
+  <!-- JavaScript -->
+  <script>
+    const btn = document.getElementById('menu-toggle');
+    const menu = document.getElementById('mobile-menu');
 
+    btn.addEventListener('click', () => {
+      menu.classList.toggle('hidden');
+    });
+  </script>
+</body>
 </html>
