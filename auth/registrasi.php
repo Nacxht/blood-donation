@@ -89,7 +89,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
   $result = $stmt->execute();
 
-  if (isset($last_donation)) {
+  if ($last_donation) {
     $last_donation_query = "UPDATE users SET last_donation = ? WHERE username = ?";
     $last_donation_stmt = $db->prepare($last_donation_query);
     $last_donation_stmt->bind_param("ss", $last_donation, $username);
