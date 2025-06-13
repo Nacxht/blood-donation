@@ -1,5 +1,10 @@
 <?php
 require_once("auth.php");
+
+if (isset($_SESSION["role"])) {
+  header("Location: admin/index.php");
+  exit;
+}
 ?>
 
 <!DOCTYPE html>

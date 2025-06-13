@@ -2,9 +2,8 @@
 require_once('../db/config.php');
 require_once('../auth.php');
 
-// Pastikan user sudah login
-if (!isset($_SESSION['username'])) {
-  header('Location: ../auth/login.php');
+if (isset($_SESSION["role"])) {
+  header("Location: admin/index.php");
   exit;
 }
 
