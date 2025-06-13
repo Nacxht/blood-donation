@@ -24,25 +24,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   // informasi donor darah
   $blood_type = $_POST["bloodType"];
   $donation_history = $_POST["donorHistory"];
-  $last_donation = $_POST["lastDonation"];
+  $last_donation = $_POST["lastDonation"] ?? NULL;
 
   // pengecekan duplikasi username
   $user_username_query = "SELECT username FROM users WHERE username = ?";
   $user_username_stmt = $db->prepare($user_username_query);
   $user_username_stmt->bind_param("s", $username);
   $user_username_stmt->execute();
-  $user_usernames = $user_username_stmt->get_result()->fetch_assoc();
+  $user_username_stmt->store_result();
+  $user_username_stmt->fetch();
 
   $admin_username_query = "SELECT username FROM admins WHERE username = ?";
   $admin_username_stmt = $db->prepare($admin_username_query);
   $admin_username_stmt->bind_param("s", $username);
   $admin_username_stmt->execute();
-  $admins_usernames = $admin_username_stmt->get_result()->fetch_assoc();
+  $admin_username_stmt->fetch();
 
   if (
-    $user_usernames || $admins_usernames
+    $user_username_stmt->num_rows() || $admin_username_stmt->num_rows()
   ) {
-    echo "<script>alert('Username sudah ada!'); window.history.back();</script>";
+    echo "<script>alert('Username sudah ada!'); window.location.href='registrasi.php';</script>";
     exit;
   }
 
@@ -51,25 +52,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $user_email_stmt = $db->prepare($user_email_query);
   $user_email_stmt->bind_param("s", $email);
   $user_email_stmt->execute();
-  $user_emails = $user_email_stmt->get_result()->fetch_assoc();
+  $user_email_stmt->get_result();
 
   $admin_email_query = "SELECT email FROM admins WHERE email = ?";
   $admin_email_stmt = $db->prepare($admin_email_query);
   $admin_email_stmt->bind_param("s", $email);
   $admin_email_stmt->execute();
-  $admin_emails = $admin_email_stmt->get_result()->fetch_assoc();
+  $admin_email_stmt->get_result();
 
   if (
-    $user_emails || $admin_emails
+    $user_email_stmt->num_rows() || $admin_email_stmt->num_rows()
   ) {
-    echo "<script>alert('Email sudah ada!'); window.history.back();</script>";
+    echo "<script>alert('Email sudah ada!'); window.location.href='registrasi.php';</script>";
     exit;
   }
 
   // insert data ke database
   $query = "INSERT INTO users
-  (username, email, password, fullname, age, phone, address, blood_type_id, birth_date, gender, donation_history)
-  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            (username, email, password, fullname, age, phone, address, blood_type_id, birth_date, gender, donation_history)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
   $stmt = $db->prepare($query);
   $stmt->bind_param(
@@ -87,21 +88,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $donation_history,
   );
 
-  $result = $stmt->execute();
-
-  if (isset($last_donation)) {
-    $last_donation_query = "UPDATE users SET last_donation = ? WHERE username = ?";
-    $last_donation_stmt = $db->prepare($last_donation_query);
-    $last_donation_stmt->bind_param("ss", $last_donation, $username);
-    $last_donation_stmt->execute();
-  }
-
-  if ($result) {
-    echo "<script>alert('Penambahan data berhasil!.'); window.location.href='index.php';</script>";
-    exit;
+  if ($stmt->execute()) {
+    echo "<script>alert('Registrasi berhasil! Silakan login.'); window.location.href='login.php';</script>";
   } else {
     echo "<script>alert('Terjadi kesalahan saat menyimpan data.'); window.history.back();</script>";
-    exit;
+  }
+
+  if ($donation_history && $donation_history == "y") {
+    $query = "UPDATE users SET last_donation = ?";
+    $stmt = $db->prepare($query);
+    $stmt->bind_param("s", $last_donation);
   }
 
   // tutup koneksi
@@ -111,7 +107,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $admin_email_stmt->close();
   $stmt->close();
 }
-?>
 ?>
 
 <!DOCTYPE html>
@@ -318,26 +313,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           </div>
         </div>
 
-        <!-- Persetujuan -->
-        <div class="mb-6">
-          <div class="flex items-start">
-            <div class="flex items-center h-5">
-              <input id="agreement" name="agreement" type="checkbox" required
-                class="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded">
-            </div>
-            <div class="ml-3">
-              <label for="agreement" class="text-sm text-gray-700">
-                Saya menyatakan bahwa semua informasi yang saya berikan adalah benar dan saya memenuhi syarat sebagai pendonor darah. <span class="text-red-600">*</span>
-              </label>
-            </div>
-          </div>
-        </div>
-
         <!-- Submit Button -->
-        <div class="flex justify-end">
+        <div class="flex justify-between">
           <button type="submit" name="submit-register" class="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-6 rounded-lg transition duration-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 shadow-md">
             Daftar Sekarang
           </button>
+          <a href="login.php" class="bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 px-6 rounded-lg transition duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 shadow-md">kembali</a>
         </div>
       </form>
     </div>
