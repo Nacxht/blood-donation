@@ -10,6 +10,10 @@ if (!isset($_GET["id"])) {
 $article_id = $_GET["id"];
 $article_query = "SELECT * FROM education_articles WHERE id = ?";
 $article_stmt = $db->prepare($article_query);
+$article_stmt->bind_param("i", $article_id);
+$article_stmt->execute();
+
+$article = $article_stmt->get_result()->fetch_assoc();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $title = $_POST["title"];
@@ -21,10 +25,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
   $stmt = $db->prepare($query);
   $stmt->bind_param(
-    "sss",
+    "sssi",
     $title,
     $content,
-    $thumbnail
+    $thumbnail,
+    $article_id
   );
 
   $result = $stmt->execute();
@@ -86,7 +91,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           <!-- Judul Artikel -->
           <div class="md:col-span-2">
             <label for="title" class="block text-blood-darker text-sm font-medium mb-2">Judul Artikel <span class="text-blood">*</span></label>
-            <input type="text" id="title" name="title" required
+            <input type="text" id="title" name="title" value="<?= $article["title"] ?>" required
               class="w-full px-4 py-2 border border-blood-light rounded-lg focus:outline-none focus:ring-2 focus:ring-blood focus:border-transparent"
               placeholder="Masukkan judul artikel">
           </div>
@@ -94,7 +99,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           <!-- URL Thumbnail -->
           <div class="md:col-span-2">
             <label for="thumbnail" class="block text-blood-darker text-sm font-medium mb-2">URL Thumbnail <span class="text-blood">*</span></label>
-            <input type="url" id="thumbnail" name="thumbnail" required
+            <input type="url" id="thumbnail" name="thumbnail" value="<?= $article["thumbnail"] ?>" required
               class="w-full px-4 py-2 border border-blood-light rounded-lg focus:outline-none focus:ring-2 focus:ring-blood focus:border-transparent"
               placeholder="https://example.com/image.jpg">
           </div>
@@ -104,7 +109,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <label for="content" class="block text-blood-darker text-sm font-medium mb-2">Konten Artikel <span class="text-blood">*</span></label>
             <textarea id="content" name="content" rows="8" required
               class="w-full px-4 py-2 border border-blood-light rounded-lg focus:outline-none focus:ring-2 focus:ring-blood focus:border-transparent"
-              placeholder="Tulis konten artikel disini..."></textarea>
+              placeholder="Tulis konten artikel disini..."><?= $article["content"] ?></textarea>
           </div>
         </div>
 
@@ -132,7 +137,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       e.preventDefault();
 
       const form = document.getElementById("articleForm");
-      form.action = "tambah.php";
+      form.action = "edit.php?id=<?= $article["id"] ?>";
       form.method = "post";
       form.submit();
     });

@@ -107,12 +107,10 @@ $articles = $db->query($article_query)->fetch_all(MYSQLI_ASSOC);
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700"><?= date("Y-m-d", strtotime($article["created_at"])) ?></td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700"><?= date("Y-m-d", strtotime($article["updated_at"])) ?></td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <a href="edit_artikel.php?id=1" class="text-blue-600 hover:text-blue-900 mr-3 transition-colors duration-200">
+                    <a href="edit.php?id=<?= $article["id"] ?>" class="text-blue-600 hover:text-blue-900 mr-3 transition-colors duration-200">
                       <i class="fas fa-edit"></i>
                     </a>
-                    <a href="#" onclick="confirmDelete(1)" class="text-red-600 hover:text-red-900 transition-colors duration-200">
-                      <i class="fas fa-trash"></i>
-                    </a>
+                    <button <?= 'onclick="deleteUser(' . $article['id'] . ')"' ?> class="text-red-600 hover:text-red-900"><i class="fas fa-trash"></i></button>
                   </td>
                 </tr>
               <?php endforeach ?>
@@ -124,11 +122,30 @@ $articles = $db->query($article_query)->fetch_all(MYSQLI_ASSOC);
   </div>
 
   <script>
-    function confirmDelete(id) {
-      if (confirm('Apakah Anda yakin ingin menghapus artikel ini?')) {
-        alert('Artikel dengan ID ' + id + ' telah dihapus (simulasi)');
-        window.location.reload();
+    function deleteUser(id) {
+      const confirmation = confirm("Apakah anda yakin ingin menghapus data ini?");
+
+      if (!confirmation) {
+        return
       }
+
+      const body = document.querySelector("body");
+
+      const form = document.createElement("form");
+      form.method = "post";
+      form.action = "hapus.php";
+      form.classList.add("hidden");
+
+      const input = document.createElement("input");
+      input.value = id;
+      input.type = "number"
+      input.name = "id";
+
+      form.appendChild(input);
+      body.appendChild(form);
+
+      form.submit();
+      return
     }
   </script>
 </body>

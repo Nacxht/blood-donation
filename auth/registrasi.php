@@ -24,26 +24,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   // informasi donor darah
   $blood_type = $_POST["bloodType"];
   $donation_history = $_POST["donorHistory"];
-  $last_donation = $_POST["lastDonation"] ?? NULL;
+  $last_donation = $_POST["lastDonation"];
 
   // pengecekan duplikasi username
   $user_username_query = "SELECT username FROM users WHERE username = ?";
   $user_username_stmt = $db->prepare($user_username_query);
   $user_username_stmt->bind_param("s", $username);
   $user_username_stmt->execute();
-  $user_username_stmt->store_result();
-  $user_username_stmt->fetch();
+  $user_usernames = $user_username_stmt->get_result()->fetch_assoc();
 
   $admin_username_query = "SELECT username FROM admins WHERE username = ?";
   $admin_username_stmt = $db->prepare($admin_username_query);
   $admin_username_stmt->bind_param("s", $username);
   $admin_username_stmt->execute();
-  $admin_username_stmt->fetch();
+  $admins_usernames = $admin_username_stmt->get_result()->fetch_assoc();
 
   if (
-    $user_username_stmt->num_rows() || $admin_username_stmt->num_rows()
+    $user_usernames || $admins_usernames
   ) {
-    echo "<script>alert('Username sudah ada!'); window.location.href='registrasi.php';</script>";
+    echo "<script>alert('Username sudah ada!'); window.history.back();</script>";
     exit;
   }
 
@@ -52,25 +51,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $user_email_stmt = $db->prepare($user_email_query);
   $user_email_stmt->bind_param("s", $email);
   $user_email_stmt->execute();
-  $user_email_stmt->get_result();
+  $user_emails = $user_email_stmt->get_result()->fetch_assoc();
 
   $admin_email_query = "SELECT email FROM admins WHERE email = ?";
   $admin_email_stmt = $db->prepare($admin_email_query);
   $admin_email_stmt->bind_param("s", $email);
   $admin_email_stmt->execute();
-  $admin_email_stmt->get_result();
+  $admin_emails = $admin_email_stmt->get_result()->fetch_assoc();
 
   if (
-    $user_email_stmt->num_rows() || $admin_email_stmt->num_rows()
+    $user_emails || $admin_emails
   ) {
-    echo "<script>alert('Email sudah ada!'); window.location.href='registrasi.php';</script>";
+    echo "<script>alert('Email sudah ada!'); window.history.back();</script>";
     exit;
   }
 
   // insert data ke database
   $query = "INSERT INTO users
-            (username, email, password, fullname, age, phone, address, blood_type_id, birth_date, gender, donation_history)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+  (username, email, password, fullname, age, phone, address, blood_type_id, birth_date, gender, donation_history)
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
   $stmt = $db->prepare($query);
   $stmt->bind_param(
@@ -88,16 +87,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $donation_history,
   );
 
-  if ($stmt->execute()) {
-    echo "<script>alert('Registrasi berhasil! Silakan login.'); window.location.href='login.php';</script>";
-  } else {
-    echo "<script>alert('Terjadi kesalahan saat menyimpan data.'); window.history.back();</script>";
+  $result = $stmt->execute();
+
+  if (isset($last_donation)) {
+    $last_donation_query = "UPDATE users SET last_donation = ? WHERE username = ?";
+    $last_donation_stmt = $db->prepare($last_donation_query);
+    $last_donation_stmt->bind_param("ss", $last_donation, $username);
+    $last_donation_stmt->execute();
   }
 
-  if ($donation_history && $donation_history == "y") {
-    $query = "UPDATE users SET last_donation = ?";
-    $stmt = $db->prepare($query);
-    $stmt->bind_param("s", $last_donation);
+  if ($result) {
+    echo "<script>alert('Register berhasil!.'); window.location.href='login.php';</script>";
+    exit;
+  } else {
+    echo "<script>alert('Terjadi kesalahan saat menyimpan data.'); window.history.back();</script>";
+    exit;
   }
 
   // tutup koneksi

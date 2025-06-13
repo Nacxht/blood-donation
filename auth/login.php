@@ -138,17 +138,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           <p class="text-xs text-gray-500 mt-1">Password minimal 8 karakter</p>
         </div>
 
-        <!-- Remember Me & Forgot Password -->
-        <div class="flex items-center justify-between mb-6">
-          <div class="flex items-center">
-            <input id="rememberMe" type="checkbox" class="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded">
-            <label for="rememberMe" class="ml-2 block text-sm text-gray-700">Ingat saya</label>
-          </div>
-          <div>
-            <a href="#" class="text-sm text-red-600 hover:text-red-800">Lupa password?</a>
-          </div>
-        </div>
-
         <!-- Login Button -->
         <button type="submit" name="submit-login" class="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg transition duration-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 shadow-md">
           Masuk

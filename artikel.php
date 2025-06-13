@@ -110,30 +110,30 @@ require_once('db/config.php');
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
 
         <?php
-        $sql = "SELECT * FROM eduction_articles ORDER BY created_at DESC";
+        $sql = "SELECT * FROM education_articles ORDER BY created_at DESC";
         $result = $db->query($sql);
 
         if ($result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                ?>
-                <article class="bg-white rounded-xl shadow-lg overflow-hidden card-hover">
-                  <img src="<?= htmlspecialchars($row['thumbnail']) ?>" alt="Thumbnail" class="w-full h-48 object-cover">
-                  <div class="p-6">
-                    <div class="flex items-center mb-3">
-                      <span class="bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm font-medium">Artikel</span>
-                      <span class="text-gray-400 ml-3 text-sm"><?= date("d M Y", strtotime($row['created_at'])) ?></span>
-                    </div>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-3"><?= htmlspecialchars($row['title']) ?></h3>
-                    <p class="text-gray-600 mb-4">
-                      <?= substr(strip_tags($row['content']), 0, 100) ?>...
-                    </p>
-                    <a href="#" class="text-red-500 font-semibold hover:text-red-600 transition">Baca Selengkapnya</a>
-                  </div>
-                </article>
-                <?php
-            }
+          while ($row = $result->fetch_assoc()) {
+        ?>
+            <article class="bg-white rounded-xl shadow-lg overflow-hidden card-hover">
+              <img src="<?= htmlspecialchars($row['thumbnail']) ?>" alt="Thumbnail" class="w-full h-48 object-cover">
+              <div class="p-6">
+                <div class="flex items-center mb-3">
+                  <span class="bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm font-medium">Artikel</span>
+                  <span class="text-gray-400 ml-3 text-sm"><?= date("d M Y", strtotime($row['created_at'])) ?></span>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-800 mb-3"><?= htmlspecialchars($row['title']) ?></h3>
+                <p class="text-gray-600 mb-4">
+                  <?= substr(strip_tags($row['content']), 0, 100) ?>...
+                </p>
+                <a href="#" class="text-red-500 font-semibold hover:text-red-600 transition">Baca Selengkapnya</a>
+              </div>
+            </article>
+        <?php
+          }
         } else {
-            echo "<p class='text-center text-gray-500 col-span-3'>Belum ada artikel.</p>";
+          echo "<p class='text-center text-gray-500 col-span-3'>Belum ada artikel.</p>";
         }
         ?>
 
@@ -194,4 +194,5 @@ require_once('db/config.php');
     });
   </script>
 </body>
+
 </html>
