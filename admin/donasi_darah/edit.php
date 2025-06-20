@@ -32,18 +32,20 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   $status = $_POST["eventStatus"];
 
   $query = "UPDATE donation_requests
-  SET event_name = ?, location = ?, date = ?, time = ?, description = ?, blood_type_id = ?, status = ?";
+  SET event_name = ?, location = ?, date = ?, time = ?, description = ?, blood_type_id = ?, status = ?
+  WHERE id = ?";
 
   $stmt = $db->prepare($query);
   $stmt->bind_param(
-    "sssssss",
+    "sssssssi",
     $event_name,
     $location,
     $date,
     $time,
     $description,
     $blood_type,
-    $status
+    $status,
+    $donation_id
   );
 
   if ($stmt->execute()) {
